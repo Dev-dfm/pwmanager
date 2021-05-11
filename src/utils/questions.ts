@@ -1,4 +1,5 @@
 import inquirer from 'inquirer';
+import { Command } from '../types';
 
 // export function askForMainPassword(): Promise<string> {
 export const askForMainPassword = (): Promise<string> => {
@@ -11,4 +12,17 @@ export const askForMainPassword = (): Promise<string> => {
       },
     ])
     .then((answer) => answer.mainPassword);
+};
+
+export const chooseCommand = async (): Promise<Command> => {
+  const answers = await inquirer.prompt<{ command: Command }>({
+    type: 'list',
+    name: 'command',
+    message: 'What should be be done?',
+    choices: [
+      { name: 'List all credentials', value: 'list' },
+      { name: 'Add new credentials', value: 'add' },
+    ],
+  });
+  return answers.command;
 };
