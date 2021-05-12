@@ -1,5 +1,6 @@
 import {
   askForMainPassword,
+  askForNewCredential,
   chooseCommand,
   chooseService,
 } from './utils/questions';
@@ -19,15 +20,19 @@ const start = async () => {
   const command = await chooseCommand();
 
   switch (command) {
-    // if the user chooses list, then
+    // Case: List all credentials
     case 'list':
       {
         const service = await chooseService(['Github', 'Codewars', 'Google']);
         printPassword(service);
       }
       break;
+    // Case: Add new credentials
     case 'add':
-      console.log('Add Case');
+      {
+        const newCredential = await askForNewCredential();
+        console.log(newCredential);
+      }
       break;
   }
 };

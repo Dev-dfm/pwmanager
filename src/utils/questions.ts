@@ -1,5 +1,5 @@
 import inquirer from 'inquirer';
-import { Command } from '../types';
+import type { Command, Credential } from '../types';
 
 // export function askForMainPassword(): Promise<string> {
 export const askForMainPassword = (): Promise<string> => {
@@ -34,6 +34,29 @@ export const chooseService = async (services: string[]): Promise<string> => {
     message: 'Please choose a service',
     choices: services,
   });
-
   return answers.service;
+};
+
+// in the type Credential all 3 names are declaired as string
+export const askForNewCredential = async (): Promise<Credential> => {
+  const newCredential = await inquirer.prompt<Credential>([
+    // Array with 3 objects: service, user, password 
+    {
+      type: 'input',
+      name: 'service',
+      message: 'Please enter service name:',
+    },
+    {
+      type: 'input',
+      name: 'user',
+      message: 'Please enter username:',
+    },
+    {
+      type: 'password',
+      name: 'password',
+      message: 'Please enter your password:',
+      mask: [],
+    },
+  ]);
+  return newCredential;
 };
