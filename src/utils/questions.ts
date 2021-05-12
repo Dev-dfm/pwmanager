@@ -40,7 +40,7 @@ export const chooseService = async (services: string[]): Promise<string> => {
 // in the type Credential all 3 names are declaired as string
 export const askForNewCredential = async (): Promise<Credential> => {
   const newCredential = await inquirer.prompt<Credential>([
-    // Array with 3 objects: service, user, password 
+    // Array with 3 objects: service, user, password
     {
       type: 'input',
       name: 'service',
