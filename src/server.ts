@@ -1,5 +1,10 @@
-import { askForMainPassword, chooseCommand } from './utils/questions';
+import {
+  askForMainPassword,
+  chooseCommand,
+  chooseService,
+} from './utils/questions';
 import { isMainPasswordValid } from './utils/validation';
+import { printPassword } from './utils/messages';
 
 // function start() {
 const start = async () => {
@@ -14,8 +19,12 @@ const start = async () => {
   const command = await chooseCommand();
 
   switch (command) {
+    // if the user chooses list, then
     case 'list':
-      console.log('List Case');
+      {
+        const service = await chooseService(['Github', 'Codewars', 'Google']);
+        printPassword(service);
+      }
       break;
     case 'add':
       console.log('Add Case');
@@ -25,11 +34,3 @@ const start = async () => {
 
 start();
 
-/* Solution with recursion */
-//   const mainPassword = await askForMainPassword();
-//   if (!isMainPasswordValid(mainPassword)) {
-//     console.log('Is invalid');
-//     start(); // Recursion
-//   } else {
-//     console.log('Is valid');
-//   }
