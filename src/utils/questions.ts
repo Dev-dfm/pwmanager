@@ -1,7 +1,6 @@
 import inquirer from 'inquirer';
 import type { Command, Credential } from '../types';
 
-// export function askForMainPassword(): Promise<string> {
 export const askForMainPassword = (): Promise<string> => {
   return inquirer
     .prompt<{ mainPassword: string }>([
@@ -37,10 +36,8 @@ export const chooseService = async (services: string[]): Promise<string> => {
   return answers.service;
 };
 
-// in the type Credential all 3 names are declaired as string
 export const askForNewCredential = async (): Promise<Credential> => {
   const newCredential = await inquirer.prompt<Credential>([
-    // Array with 3 objects: service, user, password
     {
       type: 'input',
       name: 'service',
@@ -48,7 +45,7 @@ export const askForNewCredential = async (): Promise<Credential> => {
     },
     {
       type: 'input',
-      name: 'user',
+      name: 'username',
       message: 'Please enter username:',
     },
     {

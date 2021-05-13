@@ -10,3 +10,15 @@ export const readCredentials = async (): Promise<Credential[]> => {
   const data: DB = JSON.parse(response);
   return data.credentials;
 };
+
+export const saveCredentials = async (
+  newCredential: Credential
+): Promise<void> => {
+  const credentials = await readCredentials();
+  credentials.push(newCredential);
+  await fs.writeFile(
+    './db.json',
+    JSON.stringify({ credentials: credentials }),
+    'utf-8'
+  );
+};
