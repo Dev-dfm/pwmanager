@@ -15,7 +15,8 @@ export const isNewCredentialValid = async (
 ): Promise<boolean> => {
   const credentials = await readCredentials();
   const credentialAllreadyUsed = credentials.some(
-    (credential) => credential.service.toLowerCase() === newCredential.service.toLowerCase()
+    (credential) =>
+      credential.service.toLowerCase() === newCredential.service.toLowerCase()
   );
   return credentialAllreadyUsed;
 };

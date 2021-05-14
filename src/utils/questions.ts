@@ -57,6 +57,3 @@ export const askForNewCredential = async (): Promise<Credential> => {
   ]);
   return newCredential;
 };
-
-
-

@@ -7,7 +7,7 @@ import {
 import { isMainPasswordValid, isNewCredentialValid } from './utils/validation';
 // import { printPassword } from './utils/messages';
 import { readCredentials, saveCredentials } from './utils/credentials';
-import CryptoJS from 'crypto-js'
+import CryptoJS from 'crypto-js';
 
 const start = async () => {
   let mainPassword = await askForMainPassword();
@@ -38,7 +38,11 @@ const start = async () => {
             selectedService.password,
             'BatmanAndRobin'
           );
-          console.log(`*** Your password for ${selectedService.service} is ${decrypted.toString(CryptoJS.enc.Utf8)} ***`);
+          console.log(
+            `*** Your password for ${
+              selectedService.service
+            } is ${decrypted.toString(CryptoJS.enc.Utf8)} ***`
+          );
         }
       }
       break;
