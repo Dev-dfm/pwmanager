@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import sha256 from 'crypto-js/sha256';
 import { readCredentials } from './credentials';
-import type { Credential } from "../types";
+import type { Credential } from '../types';
 
 export const isMainPasswordValid = async (
   plaintextPassword: string
@@ -15,8 +15,7 @@ export const isNewCredentialValid = async (
 ): Promise<boolean> => {
   const credentials = await readCredentials();
   const credentialAllredyUsed = credentials.some(
-    (credential) =>
-      credential.service === newCredential.service
+    (credential) => credential.service === newCredential.service
   );
   return credentialAllredyUsed;
 };

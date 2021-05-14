@@ -3,6 +3,8 @@
     { "service": "Github", "username": "Daniel", "password": "123" },
     { "service": "Google", "username": "Daniel", "password": "123" },
     { "service": "CodeWars", "username": "Daniel", "password": "123" },
-    { "service": "Batman", "username": "Robin", "password": "123" }
+    { "service": "Batman", "username": "Robin", "password": "123" },
+    { "service": "Superman", "username": "Spiderman", "password": "123" },
+    { "service": "Flash", "username": "Aquaman", "password": "123" }
   ]
 }

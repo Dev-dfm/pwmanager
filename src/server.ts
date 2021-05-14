@@ -39,18 +39,19 @@ const start = async () => {
     // Case: Add new credentials
     case 'add':
       {
-        const newCredential = await askForNewCredential();
-        // Save new credential if valid
-        if (!(await isNewCredentialValid(newCredential))) {
-          await saveCredentials(newCredential);
-          console.log(
-            `Your entries for ${newCredential.service} have been saved`
-          );
-        }
-        else
+        let newCredential = await askForNewCredential();
+        // While username double, loop function
+        while (await isNewCredentialValid(newCredential)) {
           console.log(
             `The service name "${newCredential.service}" has already been assigned. Please choose an other service name`
           );
+          newCredential = await askForNewCredential();
+        }
+        // Save new credential
+        await saveCredentials(newCredential);
+        console.log(
+          `Your entries for ${newCredential.service} have been saved`
+        );
       }
       break;
   }
