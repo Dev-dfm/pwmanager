@@ -1,11 +1,59 @@
 {
   "credentials": [
-    { "service": "Github", "username": "Daniel", "password": "123" },
-    { "service": "Google", "username": "Daniel", "password": "123" },
-    { "service": "CodeWars", "username": "Daniel", "password": "123" },
-    { "service": "Batman", "username": "Robin", "password": "123" },
-    { "service": "Superman", "username": "Spiderman", "password": "123" },
-    { "service": "Flash", "username": "Aquaman", "password": "123" },
-    { "service": "Bank", "username": "asd", "password": "dsa" }
+    {
+      "service": "Github",
+      "username": "Daniel",
+      "password": "123"
+    },
+    {
+      "service": "Google",
+      "username": "Daniel",
+      "password": "123"
+    },
+    {
+      "service": "CodeWars",
+      "username": "Daniel",
+      "password": "123"
+    },
+    {
+      "service": "Batman",
+      "username": "Robin",
+      "password": "123"
+    },
+    {
+      "service": "Superman",
+      "username": "Spiderman",
+      "password": "123"
+    },
+    {
+      "service": "Flash",
+      "username": "Aquaman",
+      "password": "123"
+    },
+    {
+      "service": "Jon",
+      "username": "Doe",
+      "password": "U2FsdGVkX18Xk9F5i2jwAjvn4QC3xky5CJfWnNEmxIY="
+    },
+    {
+      "service": "sdvj",
+      "username": "söflk",
+      "password": "U2FsdGVkX1+6jbTB4sLU/17vFu3/LjzNYYgM1DfWd7g="
+    },
+    {
+      "service": "askjdf",
+      "username": "ökdjs",
+      "password": "U2FsdGVkX1+nkER9UNqFxIrRthVj7YwDDBaCx7bNR0M="
+    },
+    {
+      "service": "123",
+      "username": "123",
+      "password": "U2FsdGVkX18PJH69hnpt8cyr0sCB1mH4BkyTVGXqSPk="
+    },
+    {
+      "service": "Test",
+      "username": "Test",
+      "password": "U2FsdGVkX19IO219DBwuwlj2BaeDzBy9LGWaqAudpP4="
+    }
   ]
 }

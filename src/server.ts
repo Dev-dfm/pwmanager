@@ -5,8 +5,9 @@ import {
   chooseService,
 } from './utils/questions';
 import { isMainPasswordValid, isNewCredentialValid } from './utils/validation';
-import { printPassword } from './utils/messages';
+// import { printPassword } from './utils/messages';
 import { readCredentials, saveCredentials } from './utils/credentials';
+import CryptoJS from 'crypto-js'
 
 const start = async () => {
   let mainPassword = await askForMainPassword();
@@ -32,15 +33,19 @@ const start = async () => {
         const selectedService = credentials.find(
           (credential) => credential.service === service
         );
-        console.log(selectedService);
-        printPassword(service);
+        if (selectedService) {
+          const decrypted = CryptoJS.AES.decrypt(
+            selectedService.password,
+            'BatmanAndRobin'
+          );
+          console.log(`*** Your password for ${selectedService.service} is ${decrypted.toString(CryptoJS.enc.Utf8)} ***`);
+        }
       }
       break;
     // Case: Add new credentials
     case 'add':
       {
         let newCredential = await askForNewCredential();
-        // While username double, loop function
         while (await isNewCredentialValid(newCredential)) {
           console.log(
             `The service name "${newCredential.service}" has already been assigned. Please choose an other service name`
