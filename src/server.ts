@@ -3,7 +3,7 @@ import {
   askForMainPassword,
   askForNewCredential,
   chooseCommand,
-  chooseService,
+  // chooseService,
 } from './utils/questions';
 import { isMainPasswordValid, isNewCredentialValid } from './utils/validation';
 // import { printPassword } from './utils/messages';
@@ -13,8 +13,9 @@ import { connectDatabase, disconnectDatabase } from './utils/database';
 dotenv.config();
 import {
   deleteCredential,
-  readCredentials,
+  // readCredentials,
   saveCredentials,
+  selectService,
 } from './utils/credentials';
 
 const start = async () => {
@@ -39,19 +40,12 @@ const start = async () => {
     // Case: List all credentials
     case 'list':
       {
-        const credentials = await readCredentials();
-        const credentialServices = credentials.map(
-          (credential) => credential.service
-        );
-        const service = await chooseService(credentialServices);
-        const selectedService = credentials.find(
-          (credential) => credential.service === service
-        );
+        const selectedService = await selectService();
         // Decrypt Password from selected credential
         if (selectedService) {
           const decrypted = CryptoJS.AES.decrypt(
             selectedService.password,
-            'BatmanAndRobin'
+            mainPassword
           );
           console.log(
             `*** Your password for ${
@@ -73,7 +67,7 @@ const start = async () => {
           newCredential = await askForNewCredential();
         }
         // Save new credential
-        await saveCredentials(newCredential);
+        await saveCredentials(newCredential, mainPassword);
         console.log(
           `Your entries for ${newCredential.service} have been saved`
         );
@@ -82,14 +76,7 @@ const start = async () => {
     // Case: Delete credential
     case 'delete':
       {
-        const credentials = await readCredentials();
-        const credentialServices = credentials.map(
-          (credential) => credential.service
-        );
-        const service = await chooseService(credentialServices);
-        const selectedService = credentials.find(
-          (credential) => credential.service === service
-        );
+        const selectedService = await selectService();
         if (selectedService) {
           await deleteCredential(selectedService);
           console.log('Service was deleted');
