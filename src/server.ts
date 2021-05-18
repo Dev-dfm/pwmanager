@@ -7,13 +7,14 @@ import {
 } from './utils/questions';
 import { isMainPasswordValid, isNewCredentialValid } from './utils/validation';
 // import { printPassword } from './utils/messages';
-import { readCredentials, saveCredentials } from './utils/credentials';
 import CryptoJS from 'crypto-js';
-import { connectDatabase } from './utils/database';
+import { connectDatabase, disconnectDatabase } from './utils/database';
 
 dotenv.config();
+import { readCredentials, saveCredentials } from './utils/credentials';
 
 const start = async () => {
+  // Connect to MongoDB
   if (!process.env.MONGO_URL) {
     throw new Error('Missing env MONGO_URL');
   }
@@ -73,6 +74,7 @@ const start = async () => {
       }
       break;
   }
+  await disconnectDatabase();
 };
 
 start();
