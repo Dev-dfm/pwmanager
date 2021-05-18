@@ -1,30 +1,56 @@
-import fs from 'fs/promises';
 import type { Credential } from '../types';
-import AES from 'crypto-js/aes';
-
-type DB = {
-  credentials: Credential[];
-};
+import { getCredentialsCollection } from './database';
+import { chooseService } from './questions';
+import CryptoJS from 'crypto-js';
 
 export const readCredentials = async (): Promise<Credential[]> => {
-  const response = await fs.readFile('./db.json', 'utf-8');
-  const data: DB = JSON.parse(response);
-  return data.credentials;
+  return await getCredentialsCollection().find().sort({ service: 1 }).toArray();
 };
 
 export const saveCredentials = async (
-  newCredential: Credential
+  newCredential: Credential,
+  mainPassword: string
 ): Promise<void> => {
+  // Encrypt Password for newCredential
+  encryptServicePassword(newCredential, mainPassword);
+  // Save newCredential to MongoDB
+  await getCredentialsCollection().insertOne(newCredential);
+};
+
+export const deleteCredential = async (service: Credential): Promise<void> => {
+  await getCredentialsCollection().deleteOne(service);
+};
+
+export const selectService = async (): Promise<Credential> => {
   const credentials = await readCredentials();
-  credentials.push(newCredential);
-  const encryptPassword = AES.encrypt(
-    newCredential.password,
-    'BatmanAndRobin'
-  ).toString();
-  newCredential.password = encryptPassword;
-  await fs.writeFile(
-    './db.json',
-    JSON.stringify({ credentials: credentials }, null, 2),
-    'utf-8'
+  const credentialServices = credentials.map(
+    (credential) => credential.service
   );
+  const service = await chooseService(credentialServices);
+  const selectedService = credentials.find(
+    (credential) => credential.service === service
+  );
+  if (!selectedService) {
+    throw new Error('Can`t find credential');
+  }
+  return selectedService;
+};
+
+export const decryptServicePassword = async (
+  selectedService: Credential,
+  mainPassword: string
+): Promise<string> => {
+  return CryptoJS.AES.decrypt(selectedService.password, mainPassword).toString(
+    CryptoJS.enc.Utf8
+  );
+};
+
+const encryptServicePassword = (
+  newCredential: Credential,
+  mainPassword: string
+) => {
+  newCredential.password = CryptoJS.AES.encrypt(
+    newCredential.password,
+    mainPassword
+  ).toString();
 };

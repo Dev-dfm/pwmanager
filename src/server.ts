@@ -1,15 +1,27 @@
+import dotenv from 'dotenv';
 import {
   askForMainPassword,
   askForNewCredential,
   chooseCommand,
-  chooseService,
 } from './utils/questions';
 import { isMainPasswordValid, isNewCredentialValid } from './utils/validation';
-// import { printPassword } from './utils/messages';
-import { readCredentials, saveCredentials } from './utils/credentials';
-import CryptoJS from 'crypto-js';
+import { connectDatabase, disconnectDatabase } from './utils/database';
+
+dotenv.config();
+import {
+  decryptServicePassword,
+  deleteCredential,
+  saveCredentials,
+  selectService,
+} from './utils/credentials';
 
 const start = async () => {
+  // Connect to MongoDB
+  if (!process.env.MONGO_URL) {
+    throw new Error('Missing env MONGO_URL');
+  }
+  await connectDatabase(process.env.MONGO_URL);
+
   let mainPassword = await askForMainPassword();
   // validation of mainPassword
   while (!(await isMainPasswordValid(mainPassword))) {
@@ -25,23 +37,15 @@ const start = async () => {
     // Case: List all credentials
     case 'list':
       {
-        const credentials = await readCredentials();
-        const credentialServices = credentials.map(
-          (credential) => credential.service
-        );
-        const service = await chooseService(credentialServices);
-        const selectedService = credentials.find(
-          (credential) => credential.service === service
-        );
+        const selectedService = await selectService();
+        // Decrypt Password from selected credential
         if (selectedService) {
-          const decrypted = CryptoJS.AES.decrypt(
-            selectedService.password,
-            'BatmanAndRobin'
+          const decryptedPassword = await decryptServicePassword(
+            selectedService,
+            mainPassword
           );
           console.log(
-            `*** Your password for ${
-              selectedService.service
-            } is ${decrypted.toString(CryptoJS.enc.Utf8)} ***`
+            `*** Your password for ${selectedService.service} is ${decryptedPassword} ***`
           );
         }
       }
@@ -50,6 +54,7 @@ const start = async () => {
     case 'add':
       {
         let newCredential = await askForNewCredential();
+        // Validate double username
         while (await isNewCredentialValid(newCredential)) {
           console.log(
             `The service name "${newCredential.service}" has already been assigned. Please choose an other service name`
@@ -57,13 +62,25 @@ const start = async () => {
           newCredential = await askForNewCredential();
         }
         // Save new credential
-        await saveCredentials(newCredential);
+        await saveCredentials(newCredential, mainPassword);
         console.log(
           `Your entries for ${newCredential.service} have been saved`
         );
       }
       break;
+    // Case: Delete credential
+    case 'delete':
+      {
+        const selectedService = await selectService();
+        if (selectedService) {
+          await deleteCredential(selectedService);
+          console.log('Service was deleted');
+        }
+      }
+      break;
   }
+  // Disconnect from MongoDatabase
+  await disconnectDatabase();
 };
 
 start();
