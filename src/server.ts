@@ -3,17 +3,14 @@ import {
   askForMainPassword,
   askForNewCredential,
   chooseCommand,
-  // chooseService,
 } from './utils/questions';
 import { isMainPasswordValid, isNewCredentialValid } from './utils/validation';
-// import { printPassword } from './utils/messages';
-import CryptoJS from 'crypto-js';
 import { connectDatabase, disconnectDatabase } from './utils/database';
 
 dotenv.config();
 import {
+  decryptServicePassword,
   deleteCredential,
-  // readCredentials,
   saveCredentials,
   selectService,
 } from './utils/credentials';
@@ -43,14 +40,12 @@ const start = async () => {
         const selectedService = await selectService();
         // Decrypt Password from selected credential
         if (selectedService) {
-          const decrypted = CryptoJS.AES.decrypt(
-            selectedService.password,
+          const decryptedPassword = await decryptServicePassword(
+            selectedService,
             mainPassword
           );
           console.log(
-            `*** Your password for ${
-              selectedService.service
-            } is ${decrypted.toString(CryptoJS.enc.Utf8)} ***`
+            `*** Your password for ${selectedService.service} is ${decryptedPassword} ***`
           );
         }
       }
