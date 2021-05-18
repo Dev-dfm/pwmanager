@@ -12,10 +12,7 @@ export const saveCredentials = async (
   mainPassword: string
 ): Promise<void> => {
   // Encrypt Password for newCredential
-  newCredential.password = CryptoJS.AES.encrypt(
-    newCredential.password,
-    mainPassword
-  ).toString();
+  encryptServicePassword(newCredential, mainPassword);
   // Save newCredential to MongoDB
   await getCredentialsCollection().insertOne(newCredential);
 };
@@ -47,3 +44,11 @@ export const decryptServicePassword = async (
     CryptoJS.enc.Utf8
   );
 };
+
+const encryptServicePassword = (newCredential: Credential, mainPassword: string) => {
+  newCredential.password = CryptoJS.AES.encrypt(
+    newCredential.password,
+    mainPassword
+  ).toString();
+}
+
