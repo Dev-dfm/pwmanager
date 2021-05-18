@@ -9,12 +9,16 @@ import { isMainPasswordValid, isNewCredentialValid } from './utils/validation';
 // import { printPassword } from './utils/messages';
 import { readCredentials, saveCredentials } from './utils/credentials';
 import CryptoJS from 'crypto-js';
+import { connectDatabase } from './utils/database';
 
 dotenv.config();
-console.log(process.env.MONGO_URL);
 
 const start = async () => {
-  // await connectDatabase(databaseURI);
+  if (!process.env.MONGO_URL) {
+    throw new Error('Missing env MONGO_URL');
+  }
+  await connectDatabase(process.env.MONGO_URL);
+
   let mainPassword = await askForMainPassword();
   // validation of mainPassword
   while (!(await isMainPasswordValid(mainPassword))) {
