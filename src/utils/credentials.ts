@@ -45,10 +45,12 @@ export const decryptServicePassword = async (
   );
 };
 
-const encryptServicePassword = (newCredential: Credential, mainPassword: string) => {
+const encryptServicePassword = (
+  newCredential: Credential,
+  mainPassword: string
+) => {
   newCredential.password = CryptoJS.AES.encrypt(
     newCredential.password,
     mainPassword
   ).toString();
-}
-
+};
