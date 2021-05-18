@@ -43,6 +43,7 @@ const start = async () => {
         const selectedService = credentials.find(
           (credential) => credential.service === service
         );
+        // Decrypt Password from selected credential
         if (selectedService) {
           const decrypted = CryptoJS.AES.decrypt(
             selectedService.password,
@@ -60,6 +61,7 @@ const start = async () => {
     case 'add':
       {
         let newCredential = await askForNewCredential();
+        // Validate double username
         while (await isNewCredentialValid(newCredential)) {
           console.log(
             `The service name "${newCredential.service}" has already been assigned. Please choose an other service name`
@@ -74,6 +76,7 @@ const start = async () => {
       }
       break;
   }
+  // Disconnect from MongoDatabase
   await disconnectDatabase();
 };
 
