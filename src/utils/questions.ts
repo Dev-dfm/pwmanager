@@ -21,6 +21,7 @@ export const chooseCommand = async (): Promise<Command> => {
     choices: [
       { name: 'List all credentials', value: 'list' },
       { name: 'Add new credentials', value: 'add' },
+      { name: 'Delete credential', value: 'delete' },
     ],
   });
   return answers.command;

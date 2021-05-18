@@ -11,7 +11,11 @@ import CryptoJS from 'crypto-js';
 import { connectDatabase, disconnectDatabase } from './utils/database';
 
 dotenv.config();
-import { readCredentials, saveCredentials } from './utils/credentials';
+import {
+  deleteCredential,
+  readCredentials,
+  saveCredentials,
+} from './utils/credentials';
 
 const start = async () => {
   // Connect to MongoDB
@@ -73,6 +77,23 @@ const start = async () => {
         console.log(
           `Your entries for ${newCredential.service} have been saved`
         );
+      }
+      break;
+    // Case: Delete credential
+    case 'delete':
+      {
+        const credentials = await readCredentials();
+        const credentialServices = credentials.map(
+          (credential) => credential.service
+        );
+        const service = await chooseService(credentialServices);
+        const selectedService = credentials.find(
+          (credential) => credential.service === service
+        );
+        if (selectedService) {
+          await deleteCredential(selectedService);
+          console.log('Service was deleted');
+        }
       }
       break;
   }

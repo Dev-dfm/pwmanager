@@ -15,7 +15,7 @@ export const disconnectDatabase = (): Promise<void> => {
   return client.close();
 };
 
-export const getCollection = <T>(name: string): Collection => {
+export const getCollection = <T>(name: string): Collection<T> => {
   return client.db().collection<T>(name);
 };
 

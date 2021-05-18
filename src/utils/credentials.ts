@@ -3,10 +3,7 @@ import AES from 'crypto-js/aes';
 import { getCredentialsCollection } from './database';
 
 export const readCredentials = async (): Promise<Credential[]> => {
-  return await getCredentialsCollection()
-    .find()
-    .sort({ service: 1 })
-    .toArray();
+  return await getCredentialsCollection().find().sort({ service: 1 }).toArray();
 };
 
 export const saveCredentials = async (
@@ -20,4 +17,8 @@ export const saveCredentials = async (
   newCredential.password = encryptPassword;
   // Save newCredential to MongoDB
   await getCredentialsCollection().insertOne(newCredential);
+};
+
+export const deleteCredential = async (service: Credential): Promise<void> => {
+  await getCredentialsCollection().deleteOne(service);
 };
