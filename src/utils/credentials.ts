@@ -1,9 +1,9 @@
 import type { Credential } from '../types';
 import AES from 'crypto-js/aes';
-import { getCollection } from './database';
+import { getCredentialsCollection } from './database';
 
 export const readCredentials = async (): Promise<Credential[]> => {
-  return await getCollection('credentials')
+  return await getCredentialsCollection()
     .find()
     .sort({ service: 1 })
     .toArray();
@@ -19,5 +19,5 @@ export const saveCredentials = async (
   ).toString();
   newCredential.password = encryptPassword;
   // Save newCredential to MongoDB
-  await getCollection('credentials').insertOne(newCredential);
+  await getCredentialsCollection().insertOne(newCredential);
 };

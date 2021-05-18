@@ -1,4 +1,5 @@
 import { Collection, MongoClient } from 'mongodb';
+import { Credential } from '../types';
 
 let client: MongoClient;
 
@@ -19,5 +20,5 @@ export const getCollection = <T>(name: string): Collection => {
 };
 
 export const getCredentialsCollection = (): Collection<Credential> => {
-  return getCollection('credentials');
+  return getCollection<Credential>('credentials');
 };
