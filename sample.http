@@ -1,4 +1,5 @@
-### Request all credentials
+### Request all credentials321
+
 GET http://localhost:5000/api/credentials HTTP/1.1
 
 ### Request a specific credential

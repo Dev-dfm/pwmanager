@@ -1,10 +1,11 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
-import { readCredentials } from './utils/credentials';
+import { readCredentials, saveCredentials } from './utils/credentials';
 import { connectDatabase } from './utils/database';
+import { askForMainPassword } from './utils/questions';
 
-if(!process.env.MONGO_URL) {
+if (!process.env.MONGO_URL) {
   throw new Error('Missing new Mongo_URL');
 }
 
@@ -21,10 +22,13 @@ app.get('/api/credentials', async (_request, response) => {
   response.json(credentials);
 });
 
-// app.post('/api/credentials', async (_request, response) => {
-//   const credentials = await saveCredentials(newCredential, mainPassword);
-//   response.json(credentials);
-// });
+app.post('/api/credentials', async (request, response) => {
+  // console.log(request.body);
+  const mainPassword = await askForMainPassword();
+  const credential = await request.body;
+  saveCredentials(credential, mainPassword);
+  response.json(request.body);
+});
 
 app.delete('/api/credentials/MyService', (_request, response) => {
   response.send('MyService has been deleted');
@@ -36,4 +40,3 @@ connectDatabase(process.env.MONGO_URL).then(() => {
     console.log(`pwmanager listening at http://localhost:${port}`);
   });
 });
-
