@@ -23,14 +23,14 @@ const start = async () => {
   await connectDatabase(process.env.MONGO_URL);
 
   let mainPassword = await askForMainPassword();
-  // validation of mainPassword
+  // Validate of mainPassword
   while (!(await isMainPasswordValid(mainPassword))) {
     console.log('Is invalid');
     mainPassword = await askForMainPassword();
   }
   console.log('is valid');
 
-  // save chosen command (List / Add)
+  // Save choosen command (List / Add)
   const command = await chooseCommand();
 
   switch (command) {

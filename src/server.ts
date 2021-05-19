@@ -1,9 +1,12 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
-import { readCredentials, saveCredentials } from './utils/credentials';
+import {
+  deleteCredential,
+  readCredentials,
+  saveCredentials,
+} from './utils/credentials';
 import { connectDatabase } from './utils/database';
-import { askForMainPassword } from './utils/questions';
 
 if (!process.env.MONGO_URL) {
   throw new Error('Missing new Mongo_URL');
@@ -12,26 +15,25 @@ if (!process.env.MONGO_URL) {
 const app = express();
 const port = 5000;
 
-// Server kann JSON kodierte Inhalte annehmen
+// server can get JSON Data
 app.use(express.json());
 
+// Request all credentials
 app.get('/api/credentials', async (_request, response) => {
-  // read credentials
   const credentials = await readCredentials();
-  // return
   response.json(credentials);
 });
 
+// Add a new credential
 app.post('/api/credentials', async (request, response) => {
-  // console.log(request.body);
-  const mainPassword = await askForMainPassword();
-  const credential = await request.body;
-  saveCredentials(credential, mainPassword);
-  response.json(request.body);
+  await saveCredentials(request.body, '321');
+  response.send('Credential saved in DB');
 });
 
-app.delete('/api/credentials/MyService', (_request, response) => {
-  response.send('MyService has been deleted');
+// Delete a credential
+app.delete('/api/credentials/:service', async (request, response) => {
+  await deleteCredential(request.params.service);
+  response.send('Credential has been deleted');
 });
 
 connectDatabase(process.env.MONGO_URL).then(() => {
