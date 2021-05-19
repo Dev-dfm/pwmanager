@@ -11,6 +11,9 @@ if(!process.env.MONGO_URL) {
 const app = express();
 const port = 5000;
 
+// Server kann JSON kodierte Inhalte annehmen
+app.use(express.json());
+
 app.get('/api/credentials', async (_request, response) => {
   // read credentials
   const credentials = await readCredentials();
@@ -18,9 +21,10 @@ app.get('/api/credentials', async (_request, response) => {
   response.json(credentials);
 });
 
-app.post('/api/credentials', (_request, response) => {
-  response.send('Add new credential');
-});
+// app.post('/api/credentials', async (_request, response) => {
+//   const credentials = await saveCredentials(newCredential, mainPassword);
+//   response.json(credentials);
+// });
 
 app.delete('/api/credentials/MyService', (_request, response) => {
   response.send('MyService has been deleted');
