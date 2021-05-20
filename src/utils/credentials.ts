@@ -8,10 +8,10 @@ export const readCredentials = async (): Promise<Credential[]> => {
 };
 
 export const readCredential = async (service: string): Promise<Credential> => {
-  const credential = await getCredentialsCollection().findOne({service});
+  const credential = await getCredentialsCollection().findOne({ service });
   if (!credential) {
-    throw new Error('Can`t find credential')
-  };
+    throw new Error('Can`t find credential');
+  }
   return credential;
 };
 
