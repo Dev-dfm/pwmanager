@@ -1,86 +1,51 @@
 import dotenv from 'dotenv';
-import {
-  askForMainPassword,
-  askForNewCredential,
-  chooseCommand,
-} from './utils/questions';
-import { isMainPasswordValid, isNewCredentialValid } from './utils/validation';
-import { connectDatabase, disconnectDatabase } from './utils/database';
-
 dotenv.config();
+import express from 'express';
 import {
-  decryptServicePassword,
   deleteCredential,
+  readCredential,
+  readCredentials,
   saveCredentials,
-  selectService,
 } from './utils/credentials';
+import { connectDatabase } from './utils/database';
 
-const start = async () => {
-  // Connect to MongoDB
-  if (!process.env.MONGO_URL) {
-    throw new Error('Missing env MONGO_URL');
-  }
-  await connectDatabase(process.env.MONGO_URL);
+if (!process.env.MONGO_URL) {
+  throw new Error('Missing new Mongo_URL');
+}
 
-  let mainPassword = await askForMainPassword();
-  // validation of mainPassword
-  while (!(await isMainPasswordValid(mainPassword))) {
-    console.log('Is invalid');
-    mainPassword = await askForMainPassword();
-  }
-  console.log('is valid');
+const app = express();
+const port = 5000;
 
-  // save chosen command (List / Add)
-  const command = await chooseCommand();
+// server can get JSON Data
+app.use(express.json());
 
-  switch (command) {
-    // Case: List all credentials
-    case 'list':
-      {
-        const selectedService = await selectService();
-        // Decrypt Password from selected credential
-        if (selectedService) {
-          const decryptedPassword = await decryptServicePassword(
-            selectedService,
-            mainPassword
-          );
-          console.log(
-            `*** Your password for ${selectedService.service} is ${decryptedPassword} ***`
-          );
-        }
-      }
-      break;
-    // Case: Add new credentials
-    case 'add':
-      {
-        let newCredential = await askForNewCredential();
-        // Validate double username
-        while (await isNewCredentialValid(newCredential)) {
-          console.log(
-            `The service name "${newCredential.service}" has already been assigned. Please choose an other service name`
-          );
-          newCredential = await askForNewCredential();
-        }
-        // Save new credential
-        await saveCredentials(newCredential, mainPassword);
-        console.log(
-          `Your entries for ${newCredential.service} have been saved`
-        );
-      }
-      break;
-    // Case: Delete credential
-    case 'delete':
-      {
-        const selectedService = await selectService();
-        if (selectedService) {
-          await deleteCredential(selectedService);
-          console.log('Service was deleted');
-        }
-      }
-      break;
-  }
-  // Disconnect from MongoDatabase
-  await disconnectDatabase();
-};
+// Request all credentials
+app.get('/api/credentials', async (_request, response) => {
+  const credentials = await readCredentials();
+  response.json(credentials);
+});
 
-start();
+// Request a specific credential
+app.get('/api/credentials/:service', async (request, response) => {
+  const credentials = await readCredential(request.params.service);
+  response.json(credentials);
+});
+
+// Add a new credential
+app.post('/api/credentials', async (request, response) => {
+  await saveCredentials(request.body, '321');
+  response.send('Credential saved in DB');
+});
+
+// Delete a credential
+app.delete('/api/credentials/:service', async (request, response) => {
+  await deleteCredential(request.params.service);
+  response.send('Credential has been deleted');
+});
+
+connectDatabase(process.env.MONGO_URL).then(() => {
+  console.log('Database connected');
+  app.listen(port, () => {
+    console.log(`pwmanager listening at http://localhost:${port}`);
+  });
+});
