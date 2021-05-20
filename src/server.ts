@@ -3,6 +3,7 @@ dotenv.config();
 import express from 'express';
 import {
   deleteCredential,
+  readCredential,
   readCredentials,
   saveCredentials,
 } from './utils/credentials';
@@ -21,6 +22,12 @@ app.use(express.json());
 // Request all credentials
 app.get('/api/credentials', async (_request, response) => {
   const credentials = await readCredentials();
+  response.json(credentials);
+});
+
+// Request a specific credential
+app.get('/api/credentials/:service', async (request, response) => {
+  const credentials = await readCredential(request.params.service);
   response.json(credentials);
 });
 

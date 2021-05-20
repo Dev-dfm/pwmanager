@@ -73,7 +73,7 @@ const start = async () => {
       {
         const selectedService = await selectService();
         if (selectedService) {
-          await deleteCredential(selectedService);
+          await deleteCredential(selectedService.service);
           console.log('Service was deleted');
         }
       }
