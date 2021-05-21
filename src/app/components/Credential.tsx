@@ -6,7 +6,7 @@ type CredentialProps = {
   credential: CredentialType;
 };
 
-function Credential({ credential }:CredentialProps): JSX.Element {
+function Credential({ credential }: CredentialProps): JSX.Element {
   return (
     <li className={styles.credential}>
       <div className={styles.service}>
