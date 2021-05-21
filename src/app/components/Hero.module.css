@@ -3,3 +3,14 @@
 *::before {
   box-sizing: border-box;
 }
+
+.hero img {
+  width: 100%;
+}
+
+.hero h1 {
+  border: 0.2em black solid;
+  margin: 1em;
+  padding: 0.5em;
+  width: 15em;
+}
