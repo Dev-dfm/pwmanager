@@ -1,43 +1,18 @@
-import React, { useState } from 'react';
-import logo from './logo.svg';
+import React from 'react';
 import styles from './App.module.css';
+import Credential from './components/Credential';
 
 function App(): JSX.Element {
-  const [count, setCount] = useState<number>(0);
-
   return (
     <div className={styles.App}>
-      <header className={styles['App-header']}>
-        <img src={logo} className={styles['App-logo']} alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className={styles['App-link']}
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className={styles['App-link']}
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
+      <h1>Key Guardian</h1>
+      <main>
+        <ul>
+          <Credential service="Service: GitHub" username="Username: JuJu" password="Password: 123" />
+          <Credential service="Service: Google" username="Username: Roman" password="Password: 123" />
+          <Credential service="Service: Netflix" username="Username: Thomas" password="Password: 123" />
+        </ul>
+      </main>
     </div>
   );
 }
