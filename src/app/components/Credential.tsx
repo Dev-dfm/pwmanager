@@ -12,10 +12,16 @@ type CredentialProps = {
 function Credential({ credential }: CredentialProps): JSX.Element {
   return (
     <li className={styles.credential}>
-      <div className={styles.service}>
+      <div className={styles.infos}>
         <img className={styles.key} src={key} alt="" />
-        <span>{credential.service}</span>
+        <div className={styles.service}>
+          <span className={styles.serviceTitle}>service</span>
+          <span>{credential.service}</span>
+        </div>
+        <div className={styles.user}>
+        <span className={styles.userTitle}>username</span>
         <span>{credential.username}</span>
+        </div>
         <button className={styles.show}>
           <img src={lock} alt="" />
         </button>
@@ -23,7 +29,7 @@ function Credential({ credential }: CredentialProps): JSX.Element {
           <img src={trash} alt="" />
         </button>
       </div>
-      <div>
+      <div className={styles.passwordCard}>
         <span className={styles.password}>{credential.password}</span>
       </div>
     </li>
