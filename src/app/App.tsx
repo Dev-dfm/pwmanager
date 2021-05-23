@@ -22,7 +22,7 @@ function App(): JSX.Element {
         title="Key Guardian"
         imgSrc="https://images.unsplash.com/photo-1584433144859-1fc3ab64a957?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1776&q=80"
       />
-      <main>
+      <main className={styles.CredentialsContainer}>
         <ul>{credentialElements}</ul>
       </main>
     </div>
