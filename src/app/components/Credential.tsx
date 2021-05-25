@@ -19,8 +19,8 @@ function Credential({ credential }: CredentialProps): JSX.Element {
           <span>{credential.service}</span>
         </div>
         <div className={styles.user}>
-        <span className={styles.userTitle}>username</span>
-        <span>{credential.username}</span>
+          <span className={styles.userTitle}>username</span>
+          <span>{credential.username}</span>
         </div>
         <button className={styles.show}>
           <img src={lock} alt="" />
